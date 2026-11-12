@@ -5,4 +5,4 @@ from app.api.router import router
 app = FastAPI(title="Task Management API", version="1.0.0")
 
 
-app.include_router(router)
+app.include_router(router, prefix="/api/v1")
