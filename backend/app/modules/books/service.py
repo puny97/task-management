@@ -1,7 +1,15 @@
 from app.modules.books.data import books
 
 
-def get_all_books(search=None):
+def get_all_books(
+    search=None,
+    author=None,
+    published_year=None,
+    sort_by="id",
+    order="asc",
+    page=1,
+    limit=10,
+):
 
     filtered_books = books.copy()
 
@@ -14,7 +22,42 @@ def get_all_books(search=None):
             if search_lower in book["title"].lower()
             or search_lower in book["author"].lower()
         ]
-    return filtered_books
+
+    if author:
+        author_lower = author.lower()
+
+        filtered_books = [
+            book for book in filtered_books if author_lower in book["author"].lower()
+        ]
+
+    if published_year:
+        filtered_books = [
+            book for book in filtered_books if book["published_year"] == published_year
+        ]
+
+    total = len(filtered_books)
+
+    filtered_books.sort(
+        key=lambda book: (
+            book[sort_by].lower() if isinstance(book[sort_by], str) else book[sort_by],
+        ),
+        reverse=order == "desc",
+    )
+
+    start = (page - 1) * limit
+    end = start + limit
+
+    paginated_books = filtered_books[start:end]
+
+    total_pages = (total + limit - 1) // limit
+
+    return {
+        "items": paginated_books,
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "total_pages": total_pages,
+    }
 
 
 def get_book_by_id(book_id: int):

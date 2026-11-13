@@ -1,17 +1,37 @@
+from typing import Literal
+
 from app.modules.books import service
-from app.modules.books.schemas import BookCreate, BookResponse
+from app.modules.books.schemas import BookCreate, BookListResponse, BookResponse
 from fastapi import APIRouter, HTTPException, Query, status
 
 router = APIRouter(prefix="/books", tags=["Books"])
 
 
-@router.get("/", response_model=list[BookResponse])
+@router.get("/", response_model=BookListResponse)
 async def get_books(
     search: str | None = Query(
         default=None, description="Search term for filtering books", min_length=1
     ),
+    author: str | None = Query(
+        default=None, description="Filter books by author", min_length=1
+    ),
+    published_year: int | None = Query(
+        default=None, description="Filter books by published year", gt=0
+    ),
+    sort_by: Literal["id", "title", "author", "published_year"] = "id",
+    order: Literal["asc", "desc"] = "asc",
+    page: int = Query(default=1, description="Page number for pagination", gt=0),
+    limit: int = Query(default=10, description="Number of items per page", gt=0),
 ):
-    return service.get_all_books(search=search)
+    return service.get_all_books(
+        search=search,
+        author=author,
+        published_year=published_year,
+        sort_by=sort_by,
+        order=order,
+        page=page,
+        limit=limit,
+    )
 
 
 @router.get("/{book_id}", response_model=BookResponse)
