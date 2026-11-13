@@ -1,6 +1,5 @@
+from app.modules.books.utils import validate_year
 from pydantic import BaseModel, Field, field_validator
-
-from backend.app.modules.books.router import validate_year
 
 
 class BookCreate(BaseModel):

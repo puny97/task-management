@@ -7,17 +7,11 @@ from app.modules.books.schemas import (
     BookResponse,
     BookUpdate,
 )
+from app.modules.books.utils import validate_year
 from fastapi import APIRouter, HTTPException, Query, status
 from pydantic import AfterValidator
 
 router = APIRouter(prefix="/books", tags=["Books"])
-
-
-def validate_year(year: int) -> int:
-    if year == 0:
-        raise ValueError("Published year cannot be 0")
-
-    return year
 
 
 @router.get("/", response_model=BookListResponse)

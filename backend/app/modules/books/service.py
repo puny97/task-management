@@ -13,9 +13,9 @@ def get_all_books(
 
     filtered_books = books.copy()
 
-    if search:
-        search_lower = search.strip().lower()
+    search_lower = search.strip().lower() if search else ""
 
+    if search_lower:
         filtered_books = [
             book
             for book in filtered_books
@@ -23,9 +23,9 @@ def get_all_books(
             or search_lower in book["author"].lower()
         ]
 
-    if author:
-        author_lower = author.strip().lower()
+    author_lower = author.strip().lower() if author else ""
 
+    if author_lower:
         filtered_books = [
             book for book in filtered_books if author_lower in book["author"].lower()
         ]
