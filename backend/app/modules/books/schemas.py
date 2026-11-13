@@ -7,6 +7,16 @@ class BookCreate(BaseModel):
     author: str = Field(min_length=1, max_length=100)
     published_year: int
 
+    @field_validator("title", "author", mode="before")
+    @classmethod
+    def validate_text_fields(cls, value: str) -> str:
+        if isinstance(value, str):
+            value = value.strip()
+
+        if not value:
+            raise ValueError("Field cannot be empty or whitespace")
+        return value
+
     @field_validator("published_year")
     @classmethod
     def validate_published_year(cls, value: int) -> int:
