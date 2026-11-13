@@ -15,8 +15,8 @@ class BookCreate(BaseModel):
         if isinstance(value, str):
             value = value.strip()
 
-        if not value:
-            raise ValueError("Field cannot be empty or whitespace")
+            if not value:
+                raise ValueError("Field cannot be empty or whitespace")
         return value
 
     @field_validator("published_year")
