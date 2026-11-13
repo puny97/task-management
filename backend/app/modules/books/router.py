@@ -1,7 +1,12 @@
 from typing import Annotated, Literal
 
 from app.modules.books import service
-from app.modules.books.schemas import BookCreate, BookListResponse, BookResponse
+from app.modules.books.schemas import (
+    BookCreate,
+    BookListResponse,
+    BookResponse,
+    BookUpdate,
+)
 from fastapi import APIRouter, HTTPException, Query, status
 from pydantic import AfterValidator
 
@@ -62,7 +67,7 @@ def create_book(book: BookCreate):
 
 
 @router.put("/{book_id}", response_model=BookResponse)
-def update_book(book_id: int, book: BookCreate):
+def update_book(book_id: int, book: BookUpdate):
     updated_book = service.update_book(book_id, book.model_dump())
 
     if updated_book is None:

@@ -1,16 +1,28 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
+
+from backend.app.modules.books.router import validate_year
 
 
 class BookCreate(BaseModel):
     title: str = Field(min_length=1, max_length=100)
     author: str = Field(min_length=1, max_length=100)
-    published_year: int = Field(gt=0)
+    published_year: int
+
+    @field_validator("published_year")
+    @classmethod
+    def validate_published_year(cls, value: int) -> int:
+        return validate_year(value)
 
 
 class BookUpdate(BaseModel):
     title: str = Field(min_length=1, max_length=100)
     author: str = Field(min_length=1, max_length=100)
-    published_year: int = Field(gt=0)
+    published_year: int
+
+    @field_validator("published_year")
+    @classmethod
+    def validate_published_year(cls, value: int) -> int:
+        return validate_year(value)
 
 
 class BookResponse(BaseModel):
