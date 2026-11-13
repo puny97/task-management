@@ -1,8 +1,20 @@
 from app.modules.books.data import books
 
 
-def get_all_books():
-    return books
+def get_all_books(search=None):
+
+    filtered_books = books.copy()
+
+    if search:
+        search_lower = search.lower()
+
+        filtered_books = [
+            book
+            for book in filtered_books
+            if search_lower in book["title"].lower()
+            or search_lower in book["author"].lower()
+        ]
+    return filtered_books
 
 
 def get_book_by_id(book_id: int):

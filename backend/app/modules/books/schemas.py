@@ -18,3 +18,11 @@ class BookResponse(BaseModel):
     title: str
     author: str
     published_year: int
+
+
+class BookListResponse(BaseModel):
+    items: list[BookResponse]
+    total: int
+    page: int
+    limit: int
+    total_pages: int

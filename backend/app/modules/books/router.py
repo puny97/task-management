@@ -1,13 +1,17 @@
 from app.modules.books import service
 from app.modules.books.schemas import BookCreate, BookResponse
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, Query, status
 
 router = APIRouter(prefix="/books", tags=["Books"])
 
 
 @router.get("/", response_model=list[BookResponse])
-async def get_books():
-    return service.get_all_books()
+async def get_books(
+    search: str | None = Query(
+        default=None, description="Search term for filtering books", min_length=1
+    ),
+):
+    return service.get_all_books(search=search)
 
 
 @router.get("/{book_id}", response_model=BookResponse)
