@@ -14,7 +14,7 @@ def get_all_books(
     filtered_books = books.copy()
 
     if search:
-        search_lower = search.lower()
+        search_lower = search.strip().lower()
 
         filtered_books = [
             book
@@ -24,7 +24,7 @@ def get_all_books(
         ]
 
     if author:
-        author_lower = author.lower()
+        author_lower = author.strip().lower()
 
         filtered_books = [
             book for book in filtered_books if author_lower in book["author"].lower()
@@ -39,7 +39,7 @@ def get_all_books(
 
     filtered_books.sort(
         key=lambda book: (
-            book[sort_by].lower() if isinstance(book[sort_by], str) else book[sort_by],
+            book[sort_by].lower() if isinstance(book[sort_by], str) else book[sort_by]
         ),
         reverse=order == "desc",
     )
